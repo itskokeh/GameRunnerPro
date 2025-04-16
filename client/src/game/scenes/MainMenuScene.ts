@@ -46,7 +46,7 @@ export default class MainMenuScene extends Phaser.Scene {
    * Create a gradient background for the menu
    */
   private createBackground(): void {
-    // Create a gradient rectangle (similar to our React UI)
+    // Create a base rectangle with the background color
     this.background = this.add.rectangle(
       0, 
       0, 
@@ -59,17 +59,23 @@ export default class MainMenuScene extends Phaser.Scene {
     // Create gradient effect with additional rectangles
     const gradientSteps = 10;
     for (let i = 0; i < gradientSteps; i++) {
-      const ratio = i / gradientSteps;
+      // Calculate color based on position
+      const blueColor = 0x1E3A8A; // Top color
+      const darkColor = 0x111827; // Bottom color
+      
+      // Simple blend between the colors based on position
+      const blendFactor = i / gradientSteps;
       const color = Phaser.Display.Color.Interpolate.ColorWithColor(
-        { r: 30, g: 58, b: 138 }, // Blue (0x1E3A8A)
-        { r: 17, g: 24, b: 39 },  // Dark (0x111827)
+        Phaser.Display.Color.ValueToColor(blueColor),
+        Phaser.Display.Color.ValueToColor(darkColor),
         gradientSteps,
         i
       );
       
+      // Create the rectangle for this gradient step
       const rect = this.add.rectangle(
         0,
-        this.cameras.main.height * (ratio),
+        this.cameras.main.height * (i / gradientSteps),
         this.cameras.main.width,
         this.cameras.main.height / gradientSteps,
         Phaser.Display.Color.GetColor(color.r, color.g, color.b)

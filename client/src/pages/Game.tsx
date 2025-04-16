@@ -6,7 +6,7 @@ import { config } from '@/game/config';
 import GameOverScreen from '@/components/GameOverScreen';
 import PauseMenu from '@/components/PauseMenu';
 import ActivePowerups from '@/components/ActivePowerups';
-import { Pause, Volume2, VolumeX } from 'lucide-react';
+import { Pause, Volume2, VolumeX, Circle } from 'lucide-react';
 
 const Game: React.FC = () => {
   const [, navigate] = useLocation();
@@ -98,7 +98,7 @@ const Game: React.FC = () => {
             </div>
             <div className="text-white font-game text-sm flex items-center">
               <span className="text-yellow-400 mr-1">
-                <Coins size={16} />
+                <Circle size={16} fill="currentColor" />
               </span>
               <span className="text-yellow-300">{coins}</span>
             </div>

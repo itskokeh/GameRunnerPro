@@ -146,13 +146,15 @@ export default class BootScene extends Phaser.Scene {
   private createPlaceholderBackground(key: string, width: number, height: number): void {
     const graphics = this.make.graphics({ x: 0, y: 0, add: false });
 
-    // Create a gradient background (dark blue to darker)
-    const gradient = graphics.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, '#1E3A8A'); // Darker blue at the top
-    gradient.addColorStop(1, '#111827'); // Almost black at the bottom
+    // Create a two-color background (dark blue to darker) without using gradient
+    // Fill the top half with darker blue
+    graphics.fillStyle(0x1E3A8A);
+    graphics.fillRect(0, 0, width, height/2);
+    
+    // Fill the bottom half with almost black
+    graphics.fillStyle(0x111827);
+    graphics.fillRect(0, height/2, width, height/2);
 
-    graphics.fillStyle(gradient);
-    graphics.fillRect(0, 0, width, height);
     graphics.generateTexture(key, width, height);
     graphics.destroy();
   }
