@@ -25,27 +25,45 @@ const Game: React.FC = () => {
 
   // Initialize Phaser game
   useEffect(() => {
+    console.log('Game component mounted, initializing Phaser...');
     if (gameRef.current && !gameInstanceRef.current) {
+      console.log('Creating Phaser game instance...');
       gameInstanceRef.current = new Phaser.Game({
         ...config,
         parent: gameRef.current,
       });
+      console.log('Phaser game created:', gameInstanceRef.current);
     }
+
+    // Set up game callbacks for communication with React
+    window.gameCallbacks = {
+      pauseGame: pauseGame,
+      resumeGame: () => {},
+      gameOver: (score: number) => {},
+      updateScore: (score: number) => {},
+      collectCoin: (value: number) => {},
+      activatePowerup: (type: string, duration: number) => {},
+      deactivatePowerup: (type: string) => {}
+    };
 
     // Clean up on unmount
     return () => {
+      console.log('Game component unmounting, destroying Phaser...');
       if (gameInstanceRef.current) {
         gameInstanceRef.current.destroy(true);
         gameInstanceRef.current = null;
       }
+      delete window.gameCallbacks;
     };
   }, []);
 
   // If game is not running, redirect to home
   useEffect(() => {
-    if (!isGameRunning && !isGameOver) {
-      navigate('/');
-    }
+    console.log("Game running state:", isGameRunning, "Game over state:", isGameOver);
+    // Comment this for now to prevent redirection while testing
+    // if (!isGameRunning && !isGameOver) {
+    //   navigate('/');
+    // }
   }, [isGameRunning, isGameOver, navigate]);
 
   // Handle key presses for pause

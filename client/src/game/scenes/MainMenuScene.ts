@@ -167,13 +167,15 @@ export default class MainMenuScene extends Phaser.Scene {
     background.setOrigin(0.5);
     background.setInteractive({ useHandCursor: true })
       .on('pointerover', () => {
-        background.fillColor = Phaser.Display.Color.ValueLighten(color, 0.1);
+        // Lighten color (adding 20% brightness)
+        background.fillColor = color + 0x333333;
       })
       .on('pointerout', () => {
         background.fillColor = color;
       })
       .on('pointerdown', () => {
-        background.fillColor = Phaser.Display.Color.ValueDarken(color, 0.1);
+        // Darken color (subtracting 20% brightness)
+        background.fillColor = color - 0x333333;
       })
       .on('pointerup', () => {
         background.fillColor = color;

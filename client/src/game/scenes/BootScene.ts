@@ -122,41 +122,61 @@ export default class BootScene extends Phaser.Scene {
     height: number,
     color: number
   ): void {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
-    graphics.fillStyle(color);
-    graphics.fillRect(0, 0, width, height);
-    graphics.generateTexture(key, width, height);
-    graphics.destroy();
+    // Create a canvas texture directly
+    const rt = this.add.renderTexture(0, 0, width, height);
+    rt.fill(color);
+    rt.saveTexture(key);
+    rt.destroy();
   }
 
   /**
    * Creates a circular placeholder sprite
    */
   private createPlaceholderCircle(key: string, radius: number, color: number): void {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
-    graphics.fillStyle(color);
-    graphics.fillCircle(radius, radius, radius);
-    graphics.generateTexture(key, radius * 2, radius * 2);
-    graphics.destroy();
+    // Create a canvas and draw a circle
+    const rt = this.add.renderTexture(0, 0, radius * 2, radius * 2);
+    
+    // Draw a filled circle using a temp graphics object
+    const tempGraphics = this.add.graphics();
+    tempGraphics.fillStyle(color);
+    tempGraphics.fillCircle(radius, radius, radius);
+    
+    // Draw the graphics to the render texture
+    rt.draw(tempGraphics);
+    tempGraphics.destroy();
+    
+    // Save as texture and cleanup
+    rt.saveTexture(key);
+    rt.destroy();
   }
 
   /**
    * Creates a placeholder background with gradient
    */
   private createPlaceholderBackground(key: string, width: number, height: number): void {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
-
-    // Create a two-color background (dark blue to darker) without using gradient
-    // Fill the top half with darker blue
-    graphics.fillStyle(0x1E3A8A);
-    graphics.fillRect(0, 0, width, height/2);
+    // Create a canvas
+    const rt = this.add.renderTexture(0, 0, width, height);
     
-    // Fill the bottom half with almost black
-    graphics.fillStyle(0x111827);
-    graphics.fillRect(0, height/2, width, height/2);
-
-    graphics.generateTexture(key, width, height);
-    graphics.destroy();
+    // Draw a filled rectangle for top and bottom using temp graphics objects
+    const topRect = this.add.graphics();
+    topRect.fillStyle(0x1E3A8A);
+    topRect.fillRect(0, 0, width, height/2);
+    
+    const bottomRect = this.add.graphics();
+    bottomRect.fillStyle(0x111827);
+    bottomRect.fillRect(0, height/2, width, height/2);
+    
+    // Draw the graphics to the render texture
+    rt.draw(topRect);
+    rt.draw(bottomRect);
+    
+    // Clean up graphics objects
+    topRect.destroy();
+    bottomRect.destroy();
+    
+    // Save as texture and cleanup
+    rt.saveTexture(key);
+    rt.destroy();
   }
 
   /**

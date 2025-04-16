@@ -13,8 +13,11 @@ const Home: React.FC = () => {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
 
   const handlePlay = () => {
+    console.log('Play button clicked, starting game...');
     startGame();
+    console.log('Game started, navigating to game page...');
     navigate('/game');
+    console.log('Navigation initiated');
   };
 
   return (
