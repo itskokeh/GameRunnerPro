@@ -184,7 +184,10 @@ export default class GameScene extends Phaser.Scene {
   /**
    * Creates the scrolling ground
    */
+  private groundPhysics!: Phaser.Physics.Arcade.Image;
+  
   private createGround(): void {
+    // Create a visible ground sprite that scrolls
     this.ground = this.add.tileSprite(
       0,
       this.cameras.main.height - GROUND_HEIGHT,
@@ -194,10 +197,15 @@ export default class GameScene extends Phaser.Scene {
     );
     this.ground.setOrigin(0, 0);
 
-    // Add ground physics
-    this.physics.add.existing(this.ground, true);
-    const groundBody = this.ground.body as Phaser.Physics.Arcade.Body;
-    groundBody.setImmovable(true);
+    // Create an invisible physics body for the ground
+    this.groundPhysics = this.physics.add.staticImage(
+      this.cameras.main.width / 2,
+      this.cameras.main.height - GROUND_HEIGHT / 2,
+      PLACEHOLDER_ASSETS.GROUND
+    );
+    this.groundPhysics.setVisible(false);
+    this.groundPhysics.setDisplaySize(this.cameras.main.width, GROUND_HEIGHT);
+    this.groundPhysics.refreshBody();
   }
 
   /**
@@ -216,7 +224,7 @@ export default class GameScene extends Phaser.Scene {
    */
   private setupCollisions(): void {
     // Player collides with the ground
-    this.physics.add.collider(this.player, this.ground);
+    this.physics.add.collider(this.player, this.groundPhysics);
 
     // Player collides with obstacles
     this.physics.add.collider(
@@ -231,7 +239,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.coinGroup,
-      this.handleCoinCollection,
+      this.handleCoinCollection as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
       undefined,
       this
     );
@@ -240,7 +248,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.powerupManager.getPowerups(),
-      this.handlePowerupCollection,
+      this.handlePowerupCollection as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
       undefined,
       this
     );
@@ -289,7 +297,8 @@ export default class GameScene extends Phaser.Scene {
    */
   private updateCoins(delta: number): void {
     this.coinGroup.getChildren().forEach((coin: Phaser.GameObjects.GameObject) => {
-      const coinSprite = coin as Coin;
+      // Use type assertion with unknown intermediary to avoid direct cast warning
+      const coinSprite = coin as unknown as Coin;
       coinSprite.update(delta, this.gameSpeed);
 
       // Check if we need to attract coins with magnet powerup
@@ -334,7 +343,7 @@ export default class GameScene extends Phaser.Scene {
     this.sound.play('coin-collect');
     
     // Hide and recycle the coin
-    (coin as Coin).collect();
+    (coin as unknown as Coin).collect();
   }
 
   /**
@@ -387,7 +396,8 @@ export default class GameScene extends Phaser.Scene {
       
       if (newTime <= 0) {
         // Deactivate powerup
-        this.deactivatePowerup(type);
+        // Cast to the valid powerup type to avoid type errors
+        this.deactivatePowerup(type as 'shield' | 'doubleCoins' | 'magnet' | 'speed');
       } else {
         // Update timer
         this.activePowerups.set(type, newTime);

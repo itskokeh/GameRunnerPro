@@ -48,16 +48,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * Create player animations
    */
   private createAnimations(): void {
-    // For placeholder graphics we're not creating complex animations
-    // In a real game, you would load sprite sheets and create animations like:
-    /*
-    this.anims.create({
+    // Create a simple run animation for the player
+    this.scene.anims.create({
       key: 'run',
-      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 5 }),
+      frames: [{ key: PLACEHOLDER_ASSETS.PLAYER }],
       frameRate: 10,
       repeat: -1
     });
-    */
+    
+    // Create jump animation
+    this.scene.anims.create({
+      key: 'jump',
+      frames: [{ key: PLACEHOLDER_ASSETS.PLAYER }],
+      frameRate: 10,
+      repeat: 0
+    });
   }
 
   /**

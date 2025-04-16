@@ -183,9 +183,31 @@ export default class BootScene extends Phaser.Scene {
    * Load necessary sound effects
    */
   private loadSounds(): void {
-    // We're using Phaser's built-in audio capabilities instead of loading external files
-    // In a real game, you would load audio files like this:
-    // this.load.audio('jump', 'assets/audio/jump.mp3');
+    // Create placeholder sound effects using an audio context
+    // In a real game, you would load external audio files
+    this.createAudioPlaceholder('jump');
+    this.createAudioPlaceholder('coin-collect');
+    this.createAudioPlaceholder('powerup-collect');
+    this.createAudioPlaceholder('shield-hit');
+    this.createAudioPlaceholder('game-over');
+  }
+  
+  /**
+   * Create placeholder sound with WebAudio
+   */
+  private createAudioPlaceholder(key: string): void {
+    // Create an empty buffer
+    const audioContext = this.sound.context;
+    const buffer = audioContext.createBuffer(1, 4410, 22050);
+    const bufferData = buffer.getChannelData(0);
+    
+    // Create white noise for the buffer
+    for (let i = 0; i < bufferData.length; i++) {
+      bufferData[i] = Math.random() * 2 - 1;
+    }
+    
+    // Add the sound to the cache
+    this.cache.audio.add(key, buffer);
   }
 
   // Class property for progress bar

@@ -167,18 +167,22 @@ export default class MainMenuScene extends Phaser.Scene {
     background.setOrigin(0.5);
     background.setInteractive({ useHandCursor: true })
       .on('pointerover', () => {
-        // Lighten color (adding 20% brightness)
-        background.fillColor = color + 0x333333;
+        // Lighten color (adding some brightness)
+        background.fillColor = 0xFFFFFF;
+        background.fillAlpha = 0.9;
       })
       .on('pointerout', () => {
         background.fillColor = color;
+        background.fillAlpha = 1;
       })
       .on('pointerdown', () => {
-        // Darken color (subtracting 20% brightness)
-        background.fillColor = color - 0x333333;
+        // Darken color (reducing brightness)
+        background.fillColor = 0x999999;
+        background.fillAlpha = 0.9;
       })
       .on('pointerup', () => {
         background.fillColor = color;
+        background.fillAlpha = 1;
       });
     
     // Create button text
