@@ -123,7 +123,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.isJumping = true;
       
       // Play jump sound
-      this.scene.sound.play('jump');
+      // Disabled for now to prevent errors
+      // this.scene.sound.play('jump');
       
       // If already jumping, prevent further jumps until landing
       if (!body.touching.down) {

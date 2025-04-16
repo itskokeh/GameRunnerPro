@@ -183,27 +183,20 @@ export default class BootScene extends Phaser.Scene {
    * Load necessary sound effects
    */
   private loadSounds(): void {
-    // Create placeholder sound effects using an audio context
-    // In a real game, you would load external audio files
-    this.createAudioPlaceholder('jump');
-    this.createAudioPlaceholder('coin-collect');
-    this.createAudioPlaceholder('powerup-collect');
-    this.createAudioPlaceholder('shield-hit');
-    this.createAudioPlaceholder('game-over');
-  }
-  
-  /**
-   * Create placeholder sound with WebAudio
-   */
-  private createAudioPlaceholder(key: string): void {
-    // For our placeholder sounds, we'll just register them without actual audio data
-    // This will prevent errors when the sound is played
+    // In a production game, we would load real sound files
+    // For this prototype, we're setting up a global sound mute
+    // to prevent errors with missing sound files
     
-    // Create a base64 encoded empty sound (1px transparent GIF)
-    const emptySoundBase64 = 'SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABGwDeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxAADwAABpAAAACAAADSAAAAAQSTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxCTUUzLjEwMFVVVVVVVVU=';
+    // Disable sound completely for the prototype
+    this.sound.mute = true;
     
-    // Add placeholder sound to the cache
-    this.cache.audio.add(key, '');
+    // Register empty sound methods on the global sound object
+    // This prevents errors when trying to play sounds that don't exist
+    const originalPlay = this.sound.play;
+    this.sound.play = function(key: string, config?: any) {
+      console.log(`Would play sound: ${key}`);
+      return { stop: () => {} } as any;
+    };
   }
 
   // Class property for progress bar

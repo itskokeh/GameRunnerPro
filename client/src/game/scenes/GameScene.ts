@@ -315,7 +315,8 @@ export default class GameScene extends Phaser.Scene {
     // If player has shield, ignore collision
     if (this.activePowerups.has('shield')) {
       // Play shield hit sound effect
-      this.sound.play('shield-hit');
+      // Disabled for now to prevent errors
+      // this.sound.play('shield-hit');
       return;
     }
 
@@ -340,7 +341,8 @@ export default class GameScene extends Phaser.Scene {
     }
     
     // Play coin collection sound
-    this.sound.play('coin-collect');
+    // Disabled for now to prevent errors
+    // this.sound.play('coin-collect');
     
     // Hide and recycle the coin
     (coin as unknown as Coin).collect();
@@ -362,7 +364,8 @@ export default class GameScene extends Phaser.Scene {
     }
     
     // Play powerup collection sound
-    this.sound.play('powerup-collect');
+    // Disabled for now to prevent errors
+    // this.sound.play('powerup-collect');
     
     // Hide and recycle the powerup
     powerupEntity.collect();
@@ -462,7 +465,8 @@ export default class GameScene extends Phaser.Scene {
     this.player.die();
     
     // Play game over sound
-    this.sound.play('game-over');
+    // Disabled for now to prevent errors
+    // this.sound.play('game-over');
     
     // Notify React about game over
     if (this.reactCallbacks?.gameOver) {
