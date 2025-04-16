@@ -196,18 +196,14 @@ export default class BootScene extends Phaser.Scene {
    * Create placeholder sound with WebAudio
    */
   private createAudioPlaceholder(key: string): void {
-    // Create an empty buffer
-    const audioContext = this.sound.context;
-    const buffer = audioContext.createBuffer(1, 4410, 22050);
-    const bufferData = buffer.getChannelData(0);
+    // For our placeholder sounds, we'll just register them without actual audio data
+    // This will prevent errors when the sound is played
     
-    // Create white noise for the buffer
-    for (let i = 0; i < bufferData.length; i++) {
-      bufferData[i] = Math.random() * 2 - 1;
-    }
+    // Create a base64 encoded empty sound (1px transparent GIF)
+    const emptySoundBase64 = 'SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABGwDeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxAADwAABpAAAACAAADSAAAAAQSTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxCTUUzLjEwMFVVVVVVVVU=';
     
-    // Add the sound to the cache
-    this.cache.audio.add(key, buffer);
+    // Add placeholder sound to the cache
+    this.cache.audio.add(key, '');
   }
 
   // Class property for progress bar

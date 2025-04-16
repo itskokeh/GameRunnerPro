@@ -95,7 +95,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     
     // Reset can jump if player is on the ground
-    if (this.body.touching.down) {
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    if (body && body.touching.down) {
       this.isJumping = false;
       this.canJump = true;
     }
@@ -110,10 +111,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    * Make the player jump
    */
   jump(): void {
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    if (!body) return;
+    
     // Only allow jumping if on the ground or can double-jump
-    if ((this.body.touching.down || !this.isJumping) && this.canJump) {
+    if ((body.touching.down || !this.isJumping) && this.canJump) {
       // Apply upward velocity
-      this.body.setVelocityY(PLAYER_JUMP_VELOCITY);
+      body.setVelocityY(PLAYER_JUMP_VELOCITY);
       
       // Update state
       this.isJumping = true;
@@ -122,12 +126,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.scene.sound.play('jump');
       
       // If already jumping, prevent further jumps until landing
-      if (!this.body.touching.down) {
+      if (!body.touching.down) {
         this.canJump = false;
       }
       
       // Play jump animation
-      // this.play('jump', true);
+      this.play('jump', true);
     }
   }
 
